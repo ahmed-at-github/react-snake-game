@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import Snake from "./Snake";
 import Food from "./Food";
 import Menu from "./Menu";
+import Button from "./Button";
 
 function getRandomFood() {
   let min = 1;
@@ -167,6 +168,7 @@ function SnakeGame() {
               <Snake snakeDots={snakeDots} />
               <Food dot={food} />
             </div>
+            {/* <Button/> */}
           </div>
         )}
       </div>

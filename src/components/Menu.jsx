@@ -1,6 +1,6 @@
 function Menu({ onRouteChange }) {
   return (
-    <div>
+    <div className="wrapper">
       <div>
         <input type="button" onClick={onRouteChange} value="start game" />
       </div>

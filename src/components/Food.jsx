@@ -3,7 +3,7 @@ function Food(props) {
     left: `${props.dot[0]}%`,
     top: `${props.dot[1]}%`,
   };
-  return <div style={style} />;
+  return <div className="food" style={style} />;
 }
 
 export default Food;

@@ -8,7 +8,7 @@ function Snake(props) {
           left: `${dot[0]}%`,
           top: `${dot[1]}%`,
         };
-        return <div key={indx} style={style} />;
+        return <div key={indx} style={style} className="snake"/>;
       })}
     </div>
   );

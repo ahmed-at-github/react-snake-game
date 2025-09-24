@@ -1,6 +1,7 @@
-import { use, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Snake from "./Snake";
 import Food from "./Food";
+import Menu from "./Menu";
 
 function getRandomFood() {
   let min = 1;
@@ -13,10 +14,10 @@ const initialState = {
   food: getRandomFood(),
   direction: "RIGHT",
   speed: 100,
-  route: "",
+  route: "menu",
   snakeDots: [
     [0, 0], //x, y
-    [0, 2], // ??
+    [0, 2],
   ],
 };
 
@@ -24,12 +25,14 @@ function SnakeGame() {
   const [food, setFood] = useState(initialState.food);
   const [direction, setDirection] = useState(initialState.direction);
   const [speed, setSpeed] = useState(initialState.speed);
-  const [route, setRoute] = useState("game");
+  const [route, setRoute] = useState(initialState.route);
   const [snakeDots, setSnakeDots] = useState(initialState.snakeDots);
 
   const onKeyDown = useCallback((e) => {
     //memoizes function reference between renders
     e.preventDefault();
+    console.log(e);
+
     switch (e.keyCode) {
       case 37:
         setDirection("LEFT");
@@ -75,6 +78,18 @@ function SnakeGame() {
     setSnakeDots(dots);
   }, [direction, snakeDots, route]);
 
+  const gameOver = useCallback(() => {
+    alert(`GAME OVER, your score is ${snakeDots.length - 2}`);
+    setFood(getRandomFood());
+    setDirection("RIGHT");
+    setSpeed(100);
+    setRoute("menu");
+    setSnakeDots([
+      [0, 0],
+      [0, 2],
+    ]);
+  }, [snakeDots]);
+
   const onSnakeOutOfBounds = useCallback(() => {
     let head = snakeDots[snakeDots.length - 1];
     if (route == "game") {
@@ -119,23 +134,11 @@ function SnakeGame() {
     setRoute("game");
   }
 
-  const gameOver = useCallback(() => {
-    alert(`GAME OVER, your score is ${snakeDots.length - 2}`);
-    setFood(getRandomFood());
-    setDirection("RIGHT");
-    setSpeed(100);
-    setRoute("menu");
-    setSnakeDots([
-      [0, 0],
-      [0, 2],
-    ]);
-  }, [snakeDots]);
-
   //mobile controls
-  function onUp() {}
-  function onDown() {}
-  function onRight() {}
-  function onLeft() {}
+  // function onUp() {}
+  // function onDown() {}
+  // function onRight() {}
+  // function onLeft() {}
 
   useEffect(() => {
     const interval = setInterval(moveSnake, speed); //Starts a repeating timer that calls moveSnake every speed milliseconds.
@@ -152,10 +155,18 @@ function SnakeGame() {
   return (
     <>
       <div>
-        <div>
-          <Snake snakeDots={snakeDots} />
-          <Food dot={food} />
-        </div>
+        {route === "menu" ? (
+          <div>
+            <Menu onRouteChange={onRouteChange} />
+          </div>
+        ) : (
+          <div>
+            <div className="game-area">
+              <Snake snakeDots={snakeDots} />
+              <Food dot={food} />
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

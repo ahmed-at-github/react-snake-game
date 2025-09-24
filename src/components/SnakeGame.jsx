@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import Snake from "./Snake";
 import Food from "./Food";
 
 function getRandomFood() {
   let min = 1;
   let max = 98;
-  let x = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2; // random within mac
+  let x = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2; // random number within max
   let y = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2;
   return [x, y];
 }
@@ -15,8 +15,8 @@ const initialState = {
   speed: 100,
   route: "",
   snakeDots: [
-    [0, 0],
-    [0, 2],
+    [0, 0], //x, y
+    [0, 2], // ??
   ],
 };
 
@@ -47,6 +47,7 @@ function SnakeGame() {
         break;
     }
   }, []);
+
   const moveSnake = useCallback(() => {
     if (route !== "game") return;
 
@@ -55,28 +56,82 @@ function SnakeGame() {
 
     switch (direction) {
       case "RIGHT":
-        head = [head[0] + 2, head[1]];
+        head = [head[0] + 2, head[1]]; //towards pos x-axis
         break;
-      case "RIGHT":
-        head = [head[0] + 2, head[1]];
+      case "LEFT":
+        head = [head[0] - 2, head[1]]; //towards neg x-axis
         break;
-      case "RIGHT":
-        head = [head[0] + 2, head[1]];
+      case "DOWN":
+        head = [head[0], head[1] + 2]; //towards neg y-axis
         break;
-      case "RIGHT":
-        head = [head[0] + 2, head[1]];
+      case "UP":
+        head = [head[0], head[1] - 2]; //towards pos y-axis
         break;
       default:
         break;
     }
-  });
-  function onSnakeOutOfBounds() {}
-  function onSnakeCollapsed() {}
-  function onSnakeEats() {}
-  function increaseSnake() {}
-  function increaseSpeed() {}
-  function onRouteChange() {}
-  function gameOver() {}
+    dots.push(head);
+    dots.shift();
+    setSnakeDots(dots);
+  }, [direction, snakeDots, route]);
+
+  const onSnakeOutOfBounds = useCallback(() => {
+    let head = snakeDots[snakeDots.length - 1];
+    if (route == "game") {
+      if (head[0] >= 100 || head[1] >= 100 || head[0] < 0 || head[1] < 0) {
+        gameOver();
+      }
+    }
+  }, [snakeDots, route, gameOver]);
+
+  const onSnakeCollapsed = useCallback(() => {
+    let snake = [...snakeDots];
+    let head = snake[snake.length - 1];
+    snake.pop();
+    snake.forEach((dot) => {
+      if (head[0] === dot[0] && head[1] === dot[1]) {
+        gameOver();
+      }
+    });
+  }, [snakeDots, gameOver]);
+
+  const onSnakeEats = useCallback(() => {
+    let head = snakeDots[snakeDots.length - 1];
+    if (head[0] === food[0] && head[1] === food[1]) {
+      setFood(getRandomFood());
+      increaseSpeed();
+      increaseSnake();
+    }
+  }, [snakeDots, food]);
+
+  function increaseSnake() {
+    let newSnake = [...snakeDots];
+    newSnake.unshift([]);
+    setSnakeDots(newSnake);
+  }
+
+  function increaseSpeed() {
+    if (speed > 10) {
+      setSpeed(speed - 20);
+    }
+  }
+  function onRouteChange() {
+    setRoute("game");
+  }
+
+  const gameOver = useCallback(() => {
+    alert(`GAME OVER, your score is ${snakeDots.length - 2}`);
+    setFood(getRandomFood());
+    setDirection("RIGHT");
+    setSpeed(100);
+    setRoute("menu");
+    setSnakeDots([
+      [0, 0],
+      [0, 2],
+    ]);
+  }, [snakeDots]);
+
+  //mobile controls
   function onUp() {}
   function onDown() {}
   function onRight() {}
@@ -86,20 +141,20 @@ function SnakeGame() {
     const interval = setInterval(moveSnake, speed); //Starts a repeating timer that calls moveSnake every speed milliseconds.
     document.onkeydown = onKeyDown;
     return () => clearInterval(interval);
-  });
+  }, [moveSnake, speed, onKeyDown]);
 
   useEffect(() => {
     onSnakeOutOfBounds();
     onSnakeCollapsed();
     onSnakeEats();
-  });
+  }, [snakeDots, onSnakeOutOfBounds, onSnakeCollapsed, onSnakeEats]);
 
   return (
     <>
       <div>
         <div>
-          <Snake snakeDots={0} />
-          <Food dot={0} />
+          <Snake snakeDots={snakeDots} />
+          <Food dot={food} />
         </div>
       </div>
     </>

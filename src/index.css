@@ -1,47 +1,74 @@
 /* index.css */
 body {
-    background-color: #1e1e1e;
+  background-color: #1e1e1e;
 }
 
 .game-area {
-    position: relative;
-    width: 600px;
-    height: 500px;
-    border: 2px solid #dc042c;
-    border-radius: 10px;
-    margin: 50px auto;
-    display: flex;
-    flex-wrap: wrap;
-    box-shadow: 0 0 10px #abbfc0;
+  position: relative;
+  width: 600px;
+  height: 500px;
+  border: 2px solid #dc042c;
+  border-radius: 10px;
+  margin: 50px auto;
+  display: flex;
+  flex-wrap: wrap;
+  box-shadow: 0 0 10px #abbfc0;
 }
 
 @media only screen and (max-width: 800px) {
-    .game-area {
-        position: relative;
-        width: 350px;
-        height: 300px;
-    }
+  .game-area {
+    position: relative;
+    width: 350px;
+    height: 300px;
+  }
 
-    .snake {
-        width: 12px;
-        height: 12px;
-    }
+  .snake {
+    width: 12px;
+    height: 12px;
+  }
 }
 
 .snake {
-    position: absolute;
-    width: 2%;
-    height: 2%;
-    background-color: #dc042c;
-    border: 1px solid white;
-    z-index: 2;
+  position: absolute;
+  width: 2%;
+  height: 2%;
+  background-color: #dc042c;
+  border: 1px solid white;
+  z-index: 2;
 }
 
 .food {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    background-color: white;
-    border-radius: 20px;
-    z-index: 1;
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  border-radius: 20px;
+  z-index: 1;
+}
+
+/* Menu.css */
+.wrapper {
+  position: relative;
+  width: 200px;
+  height: 250px;
+  border: 2px solid #dc042c;
+  /* border-radius: 10px; */
+  margin: 50px auto;
+  margin-top: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* box-shadow: 0 0 10px #abbfc0; */
+}
+
+.start {
+  margin: 100px;
+  background: #1e1e1e;
+  color: white;
+  border-radius: 7px;
+  border: 0px;
+  padding: 10px;
+  font-size: 1.2em;
+  box-shadow: 0 0 70px #abbfc0;
+  font-family: "Courier New", Courier, monospace;
 }

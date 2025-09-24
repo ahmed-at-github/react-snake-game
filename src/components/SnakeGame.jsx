@@ -78,26 +78,25 @@ function SnakeGame() {
     setSnakeDots(dots);
   }, [direction, snakeDots, route]);
 
-  const gameOver = useCallback(() => {
-    alert(`GAME OVER, your score is ${snakeDots.length - 2}`);
+  function gameOver() {
+    // alert(`GAME OVER, your score is ${snakeDots.length - 2}`);
     setFood(getRandomFood());
+    setSnakeDots(initialState.snakeDots);
     setDirection("RIGHT");
     setSpeed(100);
-    setRoute("menu");
-    setSnakeDots([
-      [0, 0],
-      [0, 2],
-    ]);
-  }, [snakeDots]);
+    setRoute("game");
+  }
 
   const onSnakeOutOfBounds = useCallback(() => {
     let head = snakeDots[snakeDots.length - 1];
     if (route == "game") {
       if (head[0] >= 100 || head[1] >= 100 || head[0] < 0 || head[1] < 0) {
         gameOver();
+        console.log("form bound");
+        return;
       }
     }
-  }, [snakeDots, route, gameOver]);
+  }, [snakeDots]);
 
   const onSnakeCollapsed = useCallback(() => {
     let snake = [...snakeDots];
@@ -106,9 +105,10 @@ function SnakeGame() {
     snake.forEach((dot) => {
       if (head[0] === dot[0] && head[1] === dot[1]) {
         gameOver();
+        console.log("from collap");
       }
     });
-  }, [snakeDots, gameOver]);
+  }, [snakeDots]);
 
   const onSnakeEats = useCallback(() => {
     let head = snakeDots[snakeDots.length - 1];
@@ -130,6 +130,7 @@ function SnakeGame() {
       setSpeed(speed - 20);
     }
   }
+
   function onRouteChange() {
     setRoute("game");
   }
@@ -139,6 +140,7 @@ function SnakeGame() {
   // function onDown() {}
   // function onRight() {}
   // function onLeft() {}
+  // function moveWithDirection() {}
 
   useEffect(() => {
     const interval = setInterval(moveSnake, speed); //Starts a repeating timer that calls moveSnake every speed milliseconds.
